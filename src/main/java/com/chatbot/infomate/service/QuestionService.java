@@ -15,6 +15,14 @@ public class QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
+    public List<Question> getAllQuestions() {
+        return questionRepository.findAll();
+    }
+
+    public Optional<Question> getQuestionById(Long questionId) {
+        return questionRepository.findById(questionId);
+    }
+
     public List<Question> getQuestionsBySubcategoryId(Long subcategoryId) {
         return questionRepository.findBySubcategoryId(subcategoryId);
     }
@@ -31,23 +39,27 @@ public class QuestionService {
         return questionRepository.findByQuestionTextContainingIgnoreCaseAndSubcategoryId(query, subcategoryId);
     }
 
-    public void addQuestion(QuestionDTO questionDTO) {
-        
+    public Question saveQuestion(Question question) {
+        return questionRepository.save(question);
+    }
+
+    public Question addQuestion(QuestionDTO questionDTO) {
+        Question question = new Question(); // Convert DTO to entity
+        // Set question properties from DTO
+        return questionRepository.save(question);
     }
 
     public void deleteQuestion(Long questionId) {
+        if(questionRepository.findById(questionId).isEmpty()){
+            throw new IllegalArgumentException("Question not found for given Id");
+        }
+        questionRepository.deleteById(questionId);
     }
 
-/*    public List<Question> getMostAskedQuestions() {
-        // Check cache first
-        List<Question> cachedQuestions = redisTemplate.opsForList().range("most_asked_questions", 0, -1);
-        if (!cachedQuestions.isEmpty()) {
-            return cachedQuestions;
+    public Question updateQuestion(Long id, Question question) {
+        if(questionRepository.findById(id).isEmpty()){
+            throw new IllegalArgumentException("Question not found for given Id");
         }
-
-        // If not cached, fetch from DB and cache it
-        List<Question> questions = questionRepository.findMostAskedQuestions();
-        redisTemplate.opsForList().rightPushAll("most_asked_questions", questions);
-        return questions;
-    }*/
+        return questionRepository.save(question);
+    }
 }

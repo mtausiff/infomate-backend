@@ -11,6 +11,10 @@ import java.util.Optional;
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     String MOST_ASKED_QUESTIONS_QUERY = "SELECT q FROM Question q LEFT JOIN Feedback f ON f.question = q GROUP BY q ORDER BY COUNT(f.id) DESC";
 
+    Optional<Question> findById(Long questionId);
+
+    List<Question> findAll();
+
     List<Question> findBySubcategoryId(Long subcategoryId);
 
     List<Question> findAllByQuestionTextContainingIgnoreCase(String query);
@@ -21,4 +25,10 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query(MOST_ASKED_QUESTIONS_QUERY)
     List<Question> findMostAskedQuestions();
+
+    Question save(Question question);
+
+    void deleteById(Long id);
+
+    boolean existsById(Long id);
 }

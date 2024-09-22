@@ -1,13 +1,15 @@
 package com.chatbot.infomate.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+@Slf4j
+@Data
 @Entity
 @Table(name = "questions")
-@Slf4j
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

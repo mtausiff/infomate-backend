@@ -1,9 +1,11 @@
 package com.chatbot.infomate.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Data
 @Entity
 @Table(name = "users")
 public class User {

@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.chatbot.infomate.model.Feedback;
 import com.chatbot.infomate.service.FeedbackService;
 
 import java.util.List;
-
 
 @Tag(name = "Feedback", description = "Feedback Controller")
 @RestController
@@ -29,15 +30,46 @@ public class FeedbackController {
 
     @Operation(summary = "get User details by accountId & role", description = "returns User details by accountId & role.")
     @PostMapping
-    public ResponseEntity<Feedback> saveFeedback(@Parameter(name = "type", description = "type of User", example = "registered,verifier,admin") @RequestBody Feedback feedback) {
+    public ResponseEntity<Feedback> saveFeedback(
+            @Parameter(name = "type", description = "type of User", example = "registered,verifier,admin") @RequestBody Feedback feedback) {
         Feedback savedFeedback = feedbackService.saveFeedback(feedback);
         return new ResponseEntity<>(savedFeedback, HttpStatus.CREATED);
     }
 
     @Operation(summary = "get User details by accountId & role", description = "returns User details by accountId & role.")
     @GetMapping("/{questionId}")
-    public ResponseEntity<List<Feedback>> getFeedbackByQuestionId(@Parameter(name = "type", description = "type of User", example = "registered,verifier,admin") @PathVariable Long questionId) {
+    public ResponseEntity<List<Feedback>> getFeedbackByQuestionId(
+            @Parameter(name = "type", description = "type of User", example = "registered,verifier,admin") @PathVariable Long questionId) {
         List<Feedback> feedbacks = feedbackService.getFeedbackByQuestionId(questionId);
         return new ResponseEntity<>(feedbacks, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get all feedback", description = "Returns a list of all feedback.")
+    @GetMapping
+    public ResponseEntity<List<Feedback>> getAllFeedback() {
+        List<Feedback> feedbacks = feedbackService.getAllFeedback();
+        return new ResponseEntity<>(feedbacks, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get feedback by ID", description = "Returns a feedback by its ID.")
+    @GetMapping("/{id}")
+    public ResponseEntity<Feedback> getFeedbackById(@PathVariable Long id) {
+        return feedbackService.getFeedbackById(id)
+                .map(feedback -> new ResponseEntity<>(feedback, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @Operation(summary = "Update feedback", description = "Updates an existing feedback.")
+    @PutMapping("/{id}")
+    public ResponseEntity<Feedback> updateFeedback(@PathVariable Long id, @RequestBody Feedback feedback) {
+        Feedback updatedFeedback = feedbackService.updateFeedback(id, feedback);
+        return new ResponseEntity<>(updatedFeedback, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Delete feedback", description = "Deletes a feedback by its ID.")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteFeedback(@PathVariable Long id) {
+        feedbackService.deleteFeedback(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

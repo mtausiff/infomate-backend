@@ -7,11 +7,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+@Data
 @Entity
 @Table(name = "feedback")
-@Slf4j
 public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -16,7 +16,26 @@ public class SubcategoryService {
         return subcategoryRepository.findAllByCategoryId(categoryId);
     }
 
-    public Optional<Subcategory> getSubcategoryByCategoryId(String categoryName) {
-        return subcategoryRepository.findBySubcategoryName(categoryName);
+    public Optional<Subcategory> getSubcategoryByName(String subcategoryName) {
+        return subcategoryRepository.findBySubcategoryName(subcategoryName);
+    }
+
+    public List<Subcategory> getAllSubcategories() {
+        return subcategoryRepository.findAll();
+    }
+
+    public Optional<Subcategory> getSubcategoryById(Long id) {
+        return subcategoryRepository.findById(id);
+    }
+
+    public Subcategory saveSubcategory(Subcategory subcategory) {
+        return subcategoryRepository.save(subcategory);
+    }
+
+    public void deleteSubcategory(Long id) {
+        if(subcategoryRepository.findById(id).isEmpty()){
+            throw new IllegalArgumentException("Subcategory not found for given Id");
+        }
+        subcategoryRepository.deleteById(id);
     }
 }

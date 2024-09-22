@@ -7,11 +7,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+@Data
 @Entity
 @Table(name = "subcategories")
-@Slf4j
 public class Subcategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
