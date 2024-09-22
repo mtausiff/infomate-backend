@@ -1,0 +1,45 @@
+server:
+  port: 8091
+
+spring:
+  application:
+    name: InfoMate
+
+  ai:
+    openai:
+      #api-key: ${OPENAI_API_KEY}
+      api-key: 
+      #spring.ai.openai.api-key or spring.ai.openai.chat.api-key
+      chat:
+        model: gpt-4o
+  sql:
+    init:
+    platform: postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: admin
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+
+#Swagger-Spring documentation
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    display-request-duration: true
+    doc-expansion: none
+  packagesToScan: com.chatbot.infomate.controller
+  pathsToMatch: /api/**
+  # path-Exclusion can also be done through '@Hidden' annotation at method-level or class-level or hidden attribute of annotation
+  pathsToExclude:
+    - /**/admin/**
+    - /admin/**
