@@ -30,18 +30,18 @@ public class CategoryController {
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
-    @Operation(summary = "get Category details by accountId & role", description = "returns Category details by accountId & role.")
+    @Operation(summary = "Add new category", description = "Adds a new category and returns the created category details.")
     @PostMapping("/")
     public ResponseEntity addCategory(
-            @Parameter(name = "type", description = "type of Category", example = "registered,verifier,admin") @PathVariable CategoryDTO categoryDTO) {
+            @Parameter(description = "Category details to be added") @RequestBody CategoryDTO categoryDTO) {
         categoryService.addCategory(categoryDTO);
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "get Category details by accountId & role", description = "returns Category details by accountId & role.")
+    @Operation(summary = "Delete category", description = "Deletes a category by its ID.")
     @DeleteMapping("/{categoryId}")
-    public ResponseEntity deleteVideoById(
-            @Parameter(name = "type", description = "type of Category", example = "registered,verifier,admin") @PathVariable Long categoryId) {
+    public ResponseEntity deleteCategory(
+            @Parameter(description = "ID of the category to be deleted") @PathVariable Long categoryId) {
         categoryService.deleteCategory(categoryId);
         return ResponseEntity.ok(null);
     }

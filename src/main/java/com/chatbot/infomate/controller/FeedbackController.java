@@ -28,18 +28,18 @@ public class FeedbackController {
     @Autowired
     private FeedbackService feedbackService;
 
-    @Operation(summary = "get User details by accountId & role", description = "returns User details by accountId & role.")
+    @Operation(summary = "Save feedback", description = "Saves new feedback and returns the created feedback details.")
     @PostMapping
     public ResponseEntity<Feedback> saveFeedback(
-            @Parameter(name = "type", description = "type of User", example = "registered,verifier,admin") @RequestBody Feedback feedback) {
+            @Parameter(description = "Feedback details to be saved") @RequestBody Feedback feedback) {
         Feedback savedFeedback = feedbackService.saveFeedback(feedback);
         return new ResponseEntity<>(savedFeedback, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "get User details by accountId & role", description = "returns User details by accountId & role.")
+    @Operation(summary = "Get feedback by question ID", description = "Returns a list of feedback for a specific question.")
     @GetMapping("/{questionId}")
     public ResponseEntity<List<Feedback>> getFeedbackByQuestionId(
-            @Parameter(name = "type", description = "type of User", example = "registered,verifier,admin") @PathVariable Long questionId) {
+            @Parameter(description = "ID of the question to retrieve feedback for") @PathVariable Long questionId) {
         List<Feedback> feedbacks = feedbackService.getFeedbackByQuestionId(questionId);
         return new ResponseEntity<>(feedbacks, HttpStatus.OK);
     }

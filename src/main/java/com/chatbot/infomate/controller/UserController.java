@@ -1,14 +1,17 @@
 package com.chatbot.infomate.controller;
 
-import com.chatbot.infomate.model.User;
-import com.chatbot.infomate.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.java.Log;
+import org.slf4j.Logger;
+import org.springframework.web.bind.annotation.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.chatbot.infomate.model.User;
+import com.chatbot.infomate.service.UserService;
 
 import java.util.List;
 
@@ -19,26 +22,26 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Operation(summary = "get User details by accountId & role", description = "returns User details by accountId & role.")
+    @Operation(summary = "Register a new user", description = "Registers a new user and returns the created user details.")
     @PostMapping("/register")
     public ResponseEntity<User> doRegister(
-            @Parameter(name = "type", description = "type of User", example = "registered,verifier,admin") @RequestBody User user) {
+            @Parameter(description = "User details for registration") @RequestBody User user) {
         User registeredUser = userService.registerUser(user);
         return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "get User details by accountId & role", description = "returns User details by accountId & role.")
+    @Operation(summary = "Login user", description = "Authenticates a user and returns the user details.")
     @PostMapping("/login")
     public ResponseEntity<User> doLogin(
-            @Parameter(name = "type", description = "type of User", example = "registered,verifier,admin") @RequestBody User user) {
+            @Parameter(description = "User credentials for login") @RequestBody User user) {
         User registeredUser = userService.loginUser(user);
         return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "get User details by accountId & role", description = "returns User details by accountId & role.")
+    @Operation(summary = "Get user by username", description = "Returns user details for the given username.")
     @GetMapping("/{username}")
     public ResponseEntity<User> getUserByUsername(
-            @Parameter(name = "type", description = "type of User", example = "registered,verifier,admin") @PathVariable String username) {
+            @Parameter(description = "Username of the user to retrieve") @PathVariable String username) {
         System.out.println("username = " + username);
         User user = userService.findByUsername(username);
         return new ResponseEntity<>(user, HttpStatus.OK);

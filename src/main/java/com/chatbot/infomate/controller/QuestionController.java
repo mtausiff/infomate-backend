@@ -1,20 +1,24 @@
 package com.chatbot.infomate.controller;
 
+import com.chatbot.infomate.dto.CategoryDTO;
 import com.chatbot.infomate.dto.QuestionDTO;
-import com.chatbot.infomate.model.Question;
-import com.chatbot.infomate.service.ChatGptService;
-import com.chatbot.infomate.service.QuestionService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import com.chatbot.infomate.model.Question;
+import com.chatbot.infomate.service.ChatGptService;
+import com.chatbot.infomate.service.QuestionService;
+
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Question", description = "Question Controller")
 @RestController
@@ -26,18 +30,18 @@ public class QuestionController {
     @Autowired
     private ChatGptService chatGptService;
 
-    @Operation(summary = "get User details by accountId & role", description = "returns User details by accountId & role.")
+    @Operation(summary = "Get questions by subcategory ID", description = "Returns a list of questions for a specific subcategory.")
     @GetMapping("/{subcategoryId}")
     public ResponseEntity<List<Question>> getQuestionsBySubcategoryId(
-            @Parameter(name = "type", description = "type of User", example = "registered,verifier,admin") @PathVariable Long subcategoryId) {
+            @Parameter(description = "ID of the subcategory to retrieve questions for") @PathVariable Long subcategoryId) {
         List<Question> questions = questionService.getQuestionsBySubcategoryId(subcategoryId);
         return new ResponseEntity<>(questions, HttpStatus.OK);
     }
 
-    @Operation(summary = "get User details by accountId & role", description = "returns User details by accountId & role.")
+    @Operation(summary = "Search questions", description = "Searches for questions based on a query string.")
     @GetMapping("/search")
     public ResponseEntity<Map<String, Object>> searchQuestions(
-            @Parameter(name = "type", description = "type of User", example = "registered,verifier,admin") @RequestParam String query) {
+            @Parameter(description = "Query string to search for questions") @RequestParam String query) {
         List<Question> results = questionService.searchQuestions(query);
         if (!results.isEmpty()) {
             Map<String, Object> response = new HashMap<>();
@@ -54,18 +58,18 @@ public class QuestionController {
         }
     }
 
-    @Operation(summary = "get Question details by accountId & role", description = "returns Question details by accountId & role.")
+    @Operation(summary = "Add new question", description = "Adds a new question and returns the created question details.")
     @PostMapping("/")
     public ResponseEntity addQuestion(
-            @Parameter(name = "type", description = "type of Question", example = "registered,verifier,admin") @PathVariable QuestionDTO questionDTO) {
+            @Parameter(description = "Question details to be added") @RequestBody QuestionDTO questionDTO) {
         questionService.addQuestion(questionDTO);
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "get Question details by accountId & role", description = "returns Question details by accountId & role.")
+    @Operation(summary = "Delete question", description = "Deletes a question by its ID.")
     @DeleteMapping("/{questionId}")
     public ResponseEntity deleteQuestionById(
-            @Parameter(name = "type", description = "type of Question", example = "registered,verifier,admin") @PathVariable Long questionId) {
+            @Parameter(description = "ID of the question to be deleted") @PathVariable Long questionId) {
         questionService.deleteQuestion(questionId);
         return ResponseEntity.ok(null);
     }

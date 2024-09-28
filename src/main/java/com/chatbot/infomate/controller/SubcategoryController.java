@@ -1,16 +1,19 @@
 package com.chatbot.infomate.controller;
 
-import com.chatbot.infomate.model.Subcategory;
-import com.chatbot.infomate.service.SubcategoryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.web.bind.annotation.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.chatbot.infomate.model.Subcategory;
+import com.chatbot.infomate.service.SubcategoryService;
 
 import java.util.List;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "SubCategory", description = "SubCategory Controller")
 @RestController
@@ -19,10 +22,10 @@ public class SubcategoryController {
     @Autowired
     private SubcategoryService subcategoryService;
 
-    @Operation(summary = "get User details by accountId & role", description = "returns User details by accountId & role.")
+    @Operation(summary = "Get subcategories by category ID", description = "Returns a list of subcategories for a specific category.")
     @GetMapping("/{categoryId}")
     public ResponseEntity<List<Subcategory>> getSubcategoriesByCategoryId(
-            @Parameter(name = "type", description = "type of User", example = "registered,verifier,admin") @PathVariable Long categoryId) {
+            @Parameter(description = "ID of the category to retrieve subcategories for") @PathVariable Long categoryId) {
         List<Subcategory> subcategories = subcategoryService.getAllSubcategoriesByCategoryId(categoryId);
         return new ResponseEntity<>(subcategories, HttpStatus.OK);
     }
